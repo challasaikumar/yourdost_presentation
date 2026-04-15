@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YourDOST — Founder's Office Assignment</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .deck {
+    width: 100%;
+    max-width: 960px;
+    position: relative;
+  }
+
+  .slide {
+    display: none;
+    background: #fff;
+    border-radius: 16px;
+    padding: 48px 52px 36px;
+    min-height: 540px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active { display: flex; flex-direction: column; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Ghost circles for cover */
+  .ghost-circle-1 {
+    position: absolute; right: -60px; top: -60px;
+    width: 380px; height: 380px;
+    border-radius: 50%;
+    background: rgba(133,82,63,0.06);
+    pointer-events: none;
+  }
+  .ghost-circle-2 {
+    position: absolute; right: 30px; top: 80px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(245,193,0,0.05);
+    pointer-events: none;
+  }
+
+  /* Typography */
+  .badge {
+    display: inline-block;
+    background: #85523F;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .badge-yellow {
+    background: #F5C100;
+    color: #1A1A2E;
+  }
+
+  h1 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 42px;
+    color: #85523F;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #85523F;
+    margin-bottom: 6px;
+  }
+
+  h2::after {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 3px;
+    background: #F5C100;
+    margin-top: 6px;
+    border-radius: 2px;
+  }
+
+  h3 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #1A1A2E;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-family: 'Nunito', sans-serif;
+    font-style: italic;
+    font-size: 14px;
+    color: #6B7280;
+    margin-bottom: 24px;
+  }
+
+  .body-text {
+    font-size: 11px;
+    color: #374151;
+    line-height: 1.7;
+  }
+
+  .subtext {
+    font-size: 10px;
+    color: #6B7280;
+    font-style: italic;
+  }
+
+  /* Stat cards — cover */
+  .stat-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 220px;
+  }
+
+  .stat-card {
+    background: #FDF6EF;
+    border-left: 5px solid #85523F;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 10px rgba(133,82,63,0.08);
+  }
+
+  .stat-num {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 38px;
+    color: #F5C100;
+    line-height: 1;
+    min-width: 44px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #374151;
+    line-height: 1.4;
+  }
+
+  /* Cover layout */
+  .cover-layout {
+    display: flex;
+    gap: 40px;
+    flex: 1;
+    align-items: center;
+  }
+
+  .cover-left { flex: 1; }
+
+  /* Bottom strip */
+  .bottom-strip {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-size: 10px;
+    color: #6B7280;
+  }
+
+  .logo-placeholder {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    color: #85523F;
+  }
+
+  /* Two column layout */
+  .two-col {
+    display: flex;
+    gap: 28px;
+    flex: 1;
+    margin-top: 16px;
+  }
+
+  .col-left { flex: 1.1; }
+  .col-right { flex: 0.9; }
+
+  /* Target list */
+  .target-list { margin-top: 10px; }
+
+  .target-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    margin-bottom: 3px;
+  }
+
+  .target-row:nth-child(odd) { background: #FDF6EF; }
+  .target-row:nth-child(even) { background: #fff; }
+
+  .target-tag {
+    background: #85523F;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 12px;
+    white-space: nowrap;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .target-name {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: #1A1A2E;
+    min-width: 110px;
+  }
+
+  .target-reason {
+    font-size: 10px;
+    color: #6B7280;
+  }
+
+  .callout-box {
+    background: #85523F;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    margin-top: 10px;
+    line-height: 1.4;
+  }
+
+  /* Gear cards */
+  .gear-cards { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+
+  .gear-card {
+    background: #fff;
+    border-left: 4px solid #85523F;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(133,82,63,0.07);
+  }
+
+  .gear-badge {
+    background: #F5C100;
+    color: #1A1A2E;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .gear-arrow {
+    text-align: center;
+    color: #85523F;
+    font-size: 14px;
+    margin: 1px 0;
+  }
+
+  .gear-insight {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: #F5C100;
+    margin-top: 8px;
+    text-align: center;
+    background: #FDF6EF;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  /* Message cards */
+  .message-cards {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+    margin-top: 14px;
+  }
+
+  .message-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 14px rgba(133,82,63,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .msg-brown { border-left: 6px solid #85523F; }
+  .msg-yellow { border-left: 6px solid #F5C100; }
+
+  .msg-to { font-size: 10px; color: #6B7280; font-style: italic; }
+
+  .msg-body {
+    font-size: 10.5px;
+    color: #374151;
+    line-height: 1.75;
+    flex: 1;
+  }
+
+  .msg-sig {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    color: #85523F;
+    border-top: 1px solid #E5E7EB;
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+
+  .chips {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .chip-brown { background: #85523F; color: #fff; }
+  .chip-yellow { background: #F5C100; color: #1A1A2E; }
+  .chip-beige { background: #FDF6EF; color: #85523F; border: 1px solid #85523F; }
+
+  /* Proposal grid */
+  .grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .prop-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 10px rgba(133,82,63,0.07);
+  }
+
+  .border-yellow { border-top: 4px solid #F5C100; }
+  .border-brown { border-top: 4px solid #85523F; }
+  .border-dark { border-top: 4px solid #1A1A2E; }
+
+  .prop-icon { font-size: 16px; margin-bottom: 4px; }
+
+  .stat-banner {
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #85523F;
+    background: #FDF6EF;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 10px 0;
+  }
+
+  .divider { border: none; border-top: 1px solid #E5E7EB; margin: 6px 0; }
+
+  .upsell-cards {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .upsell-card {
+    flex: 1;
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 10px rgba(133,82,63,0.07);
+  }
+
+  .upsell-quote {
+    font-family: 'Nunito', sans-serif;
+    font-style: italic;
+    font-size: 10px;
+    color: #6B7280;
+    background: #FDF6EF;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* Roundtable slide */
+  .stat-circles {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .stat-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+
+  .circle-brown { background: #85523F; }
+  .circle-yellow { background: #F5C100; }
+  .circle-dark { background: #1A1A2E; }
+
+  .circle-num {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .circle-white { color: #fff; }
+  .circle-dark-text { color: #1A1A2E; }
+
+  .circle-label {
+    font-size: 9px;
+    text-align: center;
+    line-height: 1.3;
+    margin-top: 2px;
+    padding: 0 4px;
+  }
+
+  .three-col {
+    display: flex;
+    gap: 14px;
+    flex: 1;
+  }
+
+  .event-col {
+    flex: 1;
+    border-radius: 10px;
+    padding: 14px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(133,82,63,0.07);
+  }
+
+  .col-brown-top { border-top: 4px solid #85523F; }
+  .col-yellow-top { border-top: 4px solid #F5C100; }
+  .col-beige-top { border-top: 4px solid #FDF6EF; background: #FDF6EF; }
+
+  .event-col ul {
+    list-style: none;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .event-col ul li {
+    font-size: 10px;
+    color: #374151;
+    line-height: 1.5;
+    padding-left: 12px;
+    position: relative;
+  }
+
+  .event-col ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #85523F;
+  }
+
+  .dark-strip {
+    background: #85523F;
+    color: #fff;
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+
+  /* Navigation */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  .nav-btn {
+    background: #85523F;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 28px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover { background: #6b3f2f; transform: scale(1.03); }
+  .nav-btn:disabled { background: #999; cursor: not-allowed; transform: none; }
+
+  .slide-counter {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #F5C100;
+  }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #555;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .dot.active { background: #F5C100; }
+
+  .section-label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #85523F;
+    padding: 4px;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+
+  .q-section {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide active" id="slide-1">
+    <div class="ghost-circle-1"></div>
+    <div class="ghost-circle-2"></div>
+    <div class="cover-layout">
+      <div class="cover-left">
+        <div class="badge">Founder's Office Assignment</div>
+        <h1>Growth and<br>Partnerships<br>Strategy</h1>
+        <p class="subtitle">Enterprises Segment — YourDOST</p>
+      </div>
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="stat-num">10</div>
+          <div class="stat-label">Target Enterprises Identified</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Outreach Gears Deployed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Upsell Strategies Designed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Signed Deal Target Per Roundtable</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-strip">
+      <span class="footer-text">Submitted by Vijay &nbsp;|&nbsp; Founder's Office, Growth and Partnerships &nbsp;|&nbsp; +91 9866778103</span>
+      <span class="logo-placeholder">YourDOST</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Q1 TARGETS + GEARS -->
+  <div class="slide" id="slide-2">
+    <h2>Q1. Target Enterprises and Outreach Strategy</h2>
+    <div class="two-col">
+      <div class="col-left">
+        <h3>Top 10 Target Organisations</h3>
+        <div class="target-list">
+          <div class="target-row"><span class="target-tag">1</span><span class="target-name">HDFC Bank</span><span class="target-reason">BFSI, highest anxiety rates, 175k employees</span></div>
+          <div class="target-row"><span class="target-tag">2</span><span class="target-name">Swiggy</span><span class="target-reason">Legal welfare mandate, post-IPO stress</span></div>
+          <div class="target-row"><span class="target-tag">3</span><span class="target-name">Infosys</span><span class="target-reason">300k workforce, ESG commitments, structured CHRO</span></div>
+          <div class="target-row"><span class="target-tag">4</span><span class="target-name">Deloitte India</span><span class="target-reason">Consulting burnout culture, prestige logo win</span></div>
+          <div class="target-row"><span class="target-tag">5</span><span class="target-name">Razorpay</span><span class="target-reason">Fintech, high performance, founder network</span></div>
+          <div class="target-row"><span class="target-tag">6</span><span class="target-name">Axis Bank</span><span class="target-reason">70k employees, BFSI follow-on after HDFC</span></div>
+          <div class="target-row"><span class="target-tag">7</span><span class="target-name">Meesho</span><span class="target-reason">Ops-heavy, high attrition, rapid growth</span></div>
+          <div class="target-row"><span class="target-tag">8</span><span class="target-name">Accenture India</span><span class="target-reason">Replaces generic EAP, 300k headcount</span></div>
+          <div class="target-row"><span class="target-tag">9</span><span class="target-name">Zomato</span><span class="target-reason">44.3% attrition, public burnout narrative</span></div>
+          <div class="target-row"><span class="target-tag">10</span><span class="target-name">Myntra</span><span class="target-reason">Female-skewed workforce, fashion high attrition</span></div>
+        </div>
+        <div class="callout-box">HDFC and Swiggy lead — urgency is legal and structural, not just cultural.</div>
+      </div>
+      <div class="col-right">
+        <h3>4-Gear Outreach System</h3>
+        <div class="gear-cards">
+          <div class="gear-card">
+            <div class="gear-badge">G1</div>
+            <div>
+              <h3>Leverage Before Motion</h3>
+              <p class="body-text">Map alumni, investors and mutual founders. Rank intros by strength before moving.</p>
+            </div>
+          </div>
+          <div class="gear-arrow">&#8595;</div>
+          <div class="gear-card">
+            <div class="gear-badge">G2</div>
+            <div>
+              <h3>Doors, Not Decks</h3>
+              <p class="body-text">Short favour-style asks only. Goal is a 20-minute conversation, not a demo.</p>
+            </div>
+          </div>
+          <div class="gear-arrow">&#8595;</div>
+          <div class="gear-card">
+            <div class="gear-badge">G3</div>
+            <div>
+              <h3>Sniper, Not Shotgun</h3>
+              <p class="body-text">Trigger-based cold emails to Tier-2 logos. Two to three thoughtful touches per company.</p>
+            </div>
+          </div>
+          <div class="gear-arrow">&#8595;</div>
+          <div class="gear-card">
+            <div class="gear-badge">G4</div>
+            <div>
+              <h3>Make Them Orbit You</h3>
+              <p class="body-text">Curated HR roundtable. Every attendee becomes warm regardless of how they started.</p>
+            </div>
+          </div>
+        </div>
+        <div class="gear-insight">Warm intro gets 10x higher reply rate than cold email</div>
+      </div>
+    </div>
+    <div class="bottom-strip">
+      <span class="footer-text">Vijay &nbsp;|&nbsp; Founder's Office, Growth and Partnerships &nbsp;|&nbsp; +91 9866778103</span>
+      <span class="logo-placeholder">YourDOST</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: OUTREACH MESSAGES -->
+  <div class="slide" id="slide-3">
+    <h2>Q1. Outreach Messages — Real, Not Templated</h2>
+    <div class="message-cards">
+      <div class="message-card msg-brown">
+        <div class="badge">Warm Outreach via Founder Introduction</div>
+        <div class="msg-to">To: Vibhash Naik, HR Head, HDFC Bank</div>
+        <div class="msg-body">
+          Hi Vibhash,<br><br>
+          Richa Singh, Founder and CEO of YourDOST, suggested I reach out. She mentioned you have been thinking about how to make mental health support at HDFC more than just a line in the policy document.<br><br>
+          At YourDOST, we help organisations give employees 24/7 access to certified counsellors, anonymously, in multiple Indian languages. HR also gets anonymised insights on stress and burnout patterns across teams so there are no blind spots.<br><br>
+          I would love to understand what HDFC is currently doing on employee wellbeing and share what has been working well in BFSI. Would a 20 minute conversation next week work for you?
+        </div>
+        <div class="msg-sig">Vijay &nbsp;|&nbsp; Founder's Office, Growth and Partnerships<br>YourDOST &nbsp;|&nbsp; +91 9866778103</div>
+      </div>
+      <div class="message-card msg-yellow">
+        <div class="badge badge-yellow">Cold Outreach — Direct</div>
+        <div class="msg-to">To: Vibhash Naik, HR Head, HDFC Bank</div>
+        <div class="msg-body">
+          Hi Vibhash,<br><br>
+          HDFC Bank has been expanding its branch workforce significantly across Tier 2 and Tier 3 cities. In organisations going through similar scale ups, there is usually a silent rise in stress, burnout, and attrition at the branch level where support systems are the weakest.<br><br>
+          YourDOST helps companies address this by giving employees confidential access to professional counsellors in local languages, while HR gets anonymised dashboards that flag wellbeing risks before they show up as engagement or attrition problems.<br><br>
+          I am not looking to jump into a demo. I would just like 15 minutes to understand how HDFC currently approaches employee wellbeing and see if there is a genuine fit.
+        </div>
+        <div class="msg-sig">Vijay &nbsp;|&nbsp; Founder's Office, Growth and Partnerships<br>YourDOST &nbsp;|&nbsp; +91 9866778103</div>
+      </div>
+    </div>
+    <div class="chips">
+      <div class="chip chip-brown">Opens with context, not pitch</div>
+      <div class="chip chip-yellow">Asks for 15 mins, not a demo</div>
+      <div class="chip chip-beige">Human tone, zero AI patterns</div>
+    </div>
+    <div class="bottom-strip">
+      <span class="footer-text">Vijay &nbsp;|&nbsp; Founder's Office, Growth and Partnerships &nbsp;|&nbsp; +91 9866778103</span>
+      <span class="logo-placeholder">YourDOST</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: SWIGGY PROPOSAL + UPSELL -->
+  <div class="slide" id="slide-4">
+    <h2>Q2. Swiggy Proposal &amp; Q3. Upsell Strategy</h2>
+    <div class="q-section">
+      <span class="section-label">Q2 Proposal</span>
+      <div style="flex:1">
+        <div class="grid-2x2">
+          <div class="prop-card border-yellow">
+            <div class="prop-icon">&#9888;</div>
+            <h3>The Problem</h3>
+            <p class="body-text">Dual workforce under stress. 33.37% attrition. Gig workers have zero mental health access. Post-IPO survivor guilt at HQ.</p>
+          </div>
+          <div class="prop-card border-brown">
+            <div class="prop-icon">&#128737;</div>
+            <h3>What We Offer</h3>
+            <p class="body-text">24/7 anonymous counselling in local languages. HR burnout dashboard. Manager program. Gig welfare module under new Labour Code.</p>
+          </div>
+          <div class="prop-card border-dark">
+            <div class="prop-icon">&#128336;</div>
+            <h3>Why Now</h3>
+            <p class="body-text">India's Code on Social Security mandates 1 to 2% of annual turnover on gig welfare. That budget must be spent by law.</p>
+          </div>
+          <div class="prop-card border-yellow">
+            <div class="prop-icon">&#127919;</div>
+            <h3>What Success Looks Like</h3>
+            <p class="body-text">3 months: 35% adoption. 6 months: first HR heatmap. 12 months: CHRO rollout, Swiggy becomes a case study.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-banner">Industry benchmark: 4x ROI on mental health investment</div>
+    <hr class="divider">
+    <div class="q-section">
+      <span class="section-label">Q3 Upsell</span>
+      <div class="upsell-cards" style="flex:1">
+        <div class="upsell-card" style="border-top: 4px solid #F5C100;">
+          <h3>Upsell 1: Manager Enablement Program</h3>
+          <p class="body-text">Train managers to spot early stress signals and refer employees to counselling before things escalate. Sits under L&D budget, not just wellness.</p>
+          <div class="upsell-quote">"What if your managers caught burnout 3 weeks before it hit performance?"</div>
+        </div>
+        <div class="upsell-card" style="border-top: 4px solid #85523F;">
+          <h3>Upsell 2: Wellness Intelligence Dashboard</h3>
+          <p class="body-text">Live department-level stress heatmaps. Shifts YourDOST from vendor to strategic partner. Hard to churn once HR presents it to the board.</p>
+          <div class="upsell-quote">"You have performance data. You have engagement data. This is the missing layer."</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-strip">
+      <span class="footer-text">Vijay &nbsp;|&nbsp; Founder's Office, Growth and Partnerships &nbsp;|&nbsp; +91 9866778103</span>
+      <span class="logo-placeholder">YourDOST</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: ROUNDTABLE TO REVENUE -->
+  <div class="slide" id="slide-5">
+    <h2>Q4. From Roundtable to Signed Deal</h2>
+    <div class="stat-circles">
+      <div class="stat-circle circle-brown">
+        <span class="circle-num circle-white">20</span>
+        <span class="circle-label circle-white">HR Leaders<br>in the Room</span>
+      </div>
+      <div class="stat-circle circle-yellow">
+        <span class="circle-num circle-dark-text">5</span>
+        <span class="circle-label circle-dark-text">Discovery<br>Calls Targeted</span>
+      </div>
+      <div class="stat-circle circle-dark">
+        <span class="circle-num circle-white">1</span>
+        <span class="circle-label circle-white">Signed Deal<br>Per Event</span>
+      </div>
+    </div>
+    <div class="three-col">
+      <div class="event-col col-brown-top">
+        <h3 style="color:#85523F;">Before</h3>
+        <ul>
+          <li>Research every attendee individually before they walk in</li>
+          <li>Send personalised invites referencing their company</li>
+          <li>Brief one existing YourDOST client to share a real story</li>
+          <li>Prepare a 5-question Wellbeing Self Score card for arrival</li>
+        </ul>
+      </div>
+      <div class="event-col col-yellow-top">
+        <h3 style="color:#1A1A2E;">During</h3>
+        <ul>
+          <li>Open with a question, not a pitch: "What signal could you not answer?"</li>
+          <li>Existing client speaks 5 minutes, real story, no slides</li>
+          <li>Close: Free 30-day Wellbeing Audit for first 5 companies</li>
+        </ul>
+      </div>
+      <div class="event-col col-beige-top">
+        <h3 style="color:#85523F;">After</h3>
+        <ul>
+          <li>24 hours: personal email per attendee referencing their words</li>
+          <li>7 days: post-event summary and India wellbeing report</li>
+          <li>14 days: book all 5 Wellbeing Audit calls</li>
+          <li>30 days: follow up with remaining 15 attendees</li>
+        </ul>
+      </div>
+    </div>
+    <div class="dark-strip">
+      Target: 5 discovery calls. 2 proposals. 1 signed deal. Every deal becomes the next roundtable's hero story.
+    </div>
+    <div class="bottom-strip" style="margin-top:10px;">
+      <span class="footer-text">Vijay &nbsp;|&nbsp; Founder's Office, Growth and Partnerships &nbsp;|&nbsp; +91 9866778103</span>
+      <span class="logo-placeholder" style="color:#fff; background:#85523F; padding:4px 10px; border-radius:8px;">YourDOST</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)" disabled>&#8592; Prev</button>
+  <span class="slide-counter" id="counter">1 / 5</span>
+  <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">Next &#8594;</button>
+</div>
+<div class="dots">
+  <div class="dot active" onclick="goToSlide(0)"></div>
+  <div class="dot" onclick="goToSlide(1)"></div>
+  <div class="dot" onclick="goToSlide(2)"></div>
+  <div class="dot" onclick="goToSlide(3)"></div>
+  <div class="dot" onclick="goToSlide(4)"></div>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+
+  function goToSlide(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + slides.length;
+    document.getElementById('prev-btn').disabled = current === 0;
+    document.getElementById('next-btn').disabled = current === slides.length - 1;
+  }
+
+  function changeSlide(dir) {
+    if (current + dir >= 0 && current + dir < slides.length) {
+      goToSlide(current + dir);
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') changeSlide(1);
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+  });
+</script>
+</body>
+</html>
